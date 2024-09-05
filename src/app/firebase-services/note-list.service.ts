@@ -68,7 +68,7 @@ export class NoteListService {
       id: id || '',
       type: obj.type || "note",
       title: obj.title || '',
-      content: obj.content || '',
+      description: obj.content || '',
       marked: obj.marked || false,
     }
   }

@@ -2,6 +2,6 @@ export interface Note {
     id: string;
     type: "note" | "trash";
     title:string;
-    content:string;
+    description:string;
     marked: boolean;
 }
