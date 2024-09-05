@@ -1,18 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { Note } from '../interfaces/note.interface';
-import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NoteListService {
-
   trashNotes: Note[] = [];
   normalNotes: Note[] = [];
-
-  // items$;
-  // items;
 
   unsubTrash;
   unsubNotes;
@@ -22,14 +18,31 @@ export class NoteListService {
   constructor() {
     this.unsubTrash = this.subTrashList();
     this.unsubNotes = this.subNoteslList();
+  }
 
-    
-  //   this.items$ = collectionData(this.getNotesRef())
-  //   this.items = this.items$.subscribe((list) => {
-  //     list.forEach(element => {
-  //       console.log(element);
-  //     });
-  //   })
+  async updateNote(note: Note) {
+    if(note.id) {
+      let docRef = this.getSingleDocRef(this.getColIdFromNote(note),note.id);
+      await updateDoc(docRef,this.getCleanJson(note)).catch(
+        (err) => {console.error(err); }
+      )
+    }
+  }
+
+  getCleanJson(note: Note):{} {
+    return {
+      type: note.type,
+      title: note.title,
+      description: note.description,
+      marked: note.marked,
+    }
+  }
+  getColIdFromNote(note: Note) {
+    if(note.type == 'note') {
+      return 'notes';
+    } else {
+      return 'trash';
+    }
   }
 
   async addNote(note: Note) {

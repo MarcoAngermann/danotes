@@ -30,7 +30,7 @@ export class AddNoteDialogComponent {
       title: this.title,
       description: this.description,
       marked: false,
-      id: '',
+     id: '',
     }
     this.noteService.addNote(note);
     this.closeDialog();
