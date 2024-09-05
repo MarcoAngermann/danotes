@@ -20,6 +20,12 @@ export class NoteListService {
     this.unsubNotes = this.subNoteslList();
   }
 
+  async deleteNote(colId: "notes" | "trash", docId: string) {
+    await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
+      (err) => {console.error(err); }
+    )
+  }
+
   async updateNote(note: Note) {
     if(note.id) {
       let docRef = this.getSingleDocRef(this.getColIdFromNote(note),note.id);
@@ -45,7 +51,7 @@ export class NoteListService {
     }
   }
 
-  async addNote(note: Note) {
+  async addNote(note: Note, colId: "notes" | "trash") {
     await addDoc(this.getNotesRef(), note).catch(
       (err) => {console.error(err); }
     ).then(
