@@ -40,14 +40,14 @@ export class NoteComponent {
 
   moveToTrash(){
     if(this.note.id){
-      this.note.type = 'trash';
       let docId = this.note.id;
-      this.note.id = undefined;
+      this.note.type = 'trash';
+      delete this.note.id;
       this.noteService.addNote(this.note, "trash");
       this.noteService.deleteNote("notes",docId);
     }
   }
-
+ 
   moveToNotes(){
     this.note.type = 'note';
   }

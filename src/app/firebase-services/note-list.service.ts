@@ -51,12 +51,18 @@ export class NoteListService {
     }
   }
 
-  async addNote(note: Note, colId: "notes" | "trash") {
-    await addDoc(this.getNotesRef(), note).catch(
-      (err) => {console.error(err); }
-    ).then(
-      (docRef) => {console.log('Document written with ID: ', docRef?.id); }
-    );
+  async addNote(item: Note, colId: 'notes' | 'trash') {
+    if (colId == 'notes') {
+      await addDoc(this.getNotesRef(), item)
+        .catch((err) => {
+          console.error(err);
+        })
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef);
+        });
+    } else {
+      await addDoc(this.getTrashRef(), item);
+    }
   }
 
   ngonDestroy() {
@@ -87,7 +93,7 @@ export class NoteListService {
       id: id || '',
       type: obj.type || "note",
       title: obj.title || '',
-      description: obj.content || '',
+      description: obj.description || '',
       marked: obj.marked || false,
     }
   }
